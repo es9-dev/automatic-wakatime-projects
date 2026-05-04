@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "automatic-wakatime-projects.helloWorld",
-        "title": "Hello World"
+        "command": "automatic-wakatime-projects.openConfig",
+        "title": "AutomaticWakatimeProjects: Open Config"
       }
     ]
   },

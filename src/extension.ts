@@ -1,26 +1,18 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'node:fs';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "automatic-wakatime-projects" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('automatic-wakatime-projects.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Automatic Wakatime Projects!');
-	});
-
-	context.subscriptions.push(disposable);
+    // Add command to open extension config
+    let openConfig = vscode.commands.registerCommand('AutomaticWakatimeProjects.openConfig', async () => {
+        const configUri = vscode.Uri.joinPath(context.globalStorageUri, 'AutomaticWakatimeProjects.config.json');
+        if (!fs.existsSync(context.globalStorageUri.fsPath)) {
+            await vscode.workspace.fs.createDirectory(context.globalStorageUri);
+        }
+        if (!fs.existsSync(configUri.fsPath)) {
+            fs.writeFileSync(configUri.fsPath, JSON.stringify({ global: { keywords: [] }, scopes: [] }, null, 4));
+        }
+        const doc = await vscode.workspace.openTextDocument(configUri);
+        await vscode.window.showTextDocument(doc);
+    });
 }
-
-// This method is called when your extension is deactivated
-export function deactivate() {}
